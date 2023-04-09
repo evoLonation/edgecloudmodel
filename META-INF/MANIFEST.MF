@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.xtext.example.edgecloudmodel
+Bundle-ManifestVersion: 2
+Bundle-Name: org.xtext.example.edgecloudmodel
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.xtext.example.edgecloudmodel; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: org.xtext.example.edgecloudmodel.eCModel.impl,
+ org.xtext.example.edgecloudmodel.services,
+ org.xtext.example.edgecloudmodel.serializer,
+ org.xtext.example.edgecloudmodel.generator,
+ org.xtext.example.edgecloudmodel.eCModel.util,
+ org.xtext.example.edgecloudmodel.scoping,
+ org.xtext.example.edgecloudmodel.eCModel,
+ org.xtext.example.edgecloudmodel.parser.antlr,
+ org.xtext.example.edgecloudmodel.validation,
+ org.xtext.example.edgecloudmodel,
+ org.xtext.example.edgecloudmodel.parser.antlr.internal
+Import-Package: org.apache.log4j
