@@ -142,12 +142,12 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cloudService" eType="#//Service"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="participants" upperBound="-1"
-        eType="#//CParticipant" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
-        eType="#//CMessage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lifelines" upperBound="-1"
+        eType="#//CLifeline" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="executions" upperBound="-1"
         eType="#//CExecution" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
+        eType="#//CMessage" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ends" upperBound="-1" eType="#//CEnd"
         containment="true"/>
   </eClassifiers>
@@ -165,13 +165,15 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sender" eType="#//CEnd"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//CEnd"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourcePoint" eType="#//CPoint"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetPoint" eType="#//CPoint"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CExecution" eSuperTypes="#//CMultiEnd">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sender" eType="#//CEnd"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//CEnd"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CExecution" eSuperTypes="#//CPoint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//CEnd"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finish" eType="#//CEnd"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CParticipant" eSuperTypes="#//CMultiEnd"/>
-  <eClassifiers xsi:type="ecore:EClass" name="CMultiEnd">
+  <eClassifiers xsi:type="ecore:EClass" name="CLifeline" eSuperTypes="#//CPoint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CPoint">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event">

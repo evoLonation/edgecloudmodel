@@ -219,9 +219,9 @@ Collaboration returns Collaboration:
 		cloudService=Service
 		
 		('[Other]'
-		participants+=CParticipant*
-		messages+=CMessage*
+		lifelines+=CLifeline*
 		executions+=CExecution*
+		messages+=CMessage*
 		ends+=CEnd*)?
 		
 	'}'
@@ -235,26 +235,28 @@ Workflow returns Workflow:
 ;
 
 CEnd:
-	'CollaborationEnd::' name=SimpleNameCS 
+	'CEnd::' name=SimpleNameCS 
 ;
 CMessage:
 	'CMessage::' name=SimpleNameCS '('
 	sender=[CEnd]
 	receiver=[CEnd]
+	sourcePoint=[CPoint]
+	targetPoint=[CPoint]
 ')'
 ;
 CExecution:
 	'CExecution::' name=SimpleNameCS '('
-	sender=[CEnd]
-	receiver=[CEnd]
+	start=[CEnd]
+	finish=[CEnd]
 ')'
 ;
-CParticipant:
-	'CParticipant::' name=SimpleNameCS
+CLifeline:
+	'CLifeline::' name=SimpleNameCS
 ;
 
-CMultiEnd:
-	CParticipant | CExecution
+CPoint:
+	CLifeline | CExecution
 ;
 
 
