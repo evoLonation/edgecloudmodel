@@ -143,6 +143,7 @@ UseCaseModel returns UseCaseModel:
 		actor+=Actor*
 		interaction += Interaction*
 		service += Service*
+		collaboration += Collaboration*
 		contract += Contract*
 		
 	'}'	
@@ -178,7 +179,7 @@ UC returns UC:
 /* ---------------- Controller  ------------------- */
 Service returns Service:
 	
-	'Service' name=SimpleNameCS '{'
+	'Service' location=ServiceLocation '::' name=SimpleNameCS '{'
 	
 	('@Description('description=DOUBLE_QUOTED_STRING')')?
 	
@@ -186,66 +187,168 @@ Service returns Service:
 	
 	('[TempProperty]' temp_property += Attribute*)? 
 	
-	('[WorkFlow]' workflow += [Workflow]*)? 
+	('[Event]' event += Event*)? 
 	
-	('[INV]' invariance+=Invariance*)?
+	('[Call]' call += Call*)? 
+	
+//	('[WorkFlow]' workflow += [Workflow]*)? 
+	
+//	('[INV]' invariance+=Invariance*)?
 	
 	'}'
+;
+
+ServiceLocation:
+name=('Edge'
+	| 'Cloud')
 ;
 
 Participant:
 	Actor | Service
 ;
 
+/* ---------------- Collaboration ------------------- */
 
-/* ---------------- Workflow ------------------- */
+Collaboration returns Collaboration:
+	'Collaboration' name=SimpleNameCS '{'
+		'[Workflow]' 
+		workflow=Workflow
+		'[EdgeService]'
+		edgeService=Service
+		'[CloudService]'
+		cloudService=Service
+		
+		('[Other]'
+		participants+=CParticipant*
+		messages+=CMessage*
+		executions+=CExecution*
+		ends+=CEnd*)?
+		
+	'}'
+;
+/* ---------------- Workflow ------------------------- */
 Workflow returns Workflow:
 	'Workflow' name=SimpleNameCS '{'
-	
 		'[' participants+=[Participant]* ']'
-		
-		partitions+=Partition*
-		
+		statements+=Statement*
 	'}'
 ;
 
-Partition:
-	name=[Participant] '{'
-		exps+=WorkflowExp*
-	'}'
+CEnd:
+	'CollaborationEnd::' name=SimpleNameCS 
+;
+CMessage:
+	'CMessage::' name=SimpleNameCS '('
+	sender=[CEnd]
+	receiver=[CEnd]
+')'
+;
+CExecution:
+	'CExecution::' name=SimpleNameCS '('
+	sender=[CEnd]
+	receiver=[CEnd]
+')'
+;
+CParticipant:
+	'CParticipant::' name=SimpleNameCS
 ;
 
-WorkflowExp:
-	SimpleOperation | ComplexOpeartion | InitalNode | ActivityFinal | ForkNode | JoinNode | PartitionAction
+CMultiEnd:
+	CParticipant | CExecution
 ;
 
-PartitionAction:
-	'->' patition=[Participant] ':' action=[JoinExp]
+
+Event :
+	name=SimpleNameCS '(' parameter+=Parameter? (',' parameter+=Parameter)* ')'
 ;
 
-JoinExp returns JoinExp:
-	Operation | SwitchExp | LoopExp
+Call:
+	name=SimpleNameCS '(' (origin+=SimpleNameCS ':' target+=SimpleNameCS)? (',' origin+=SimpleNameCS ':' target+=SimpleNameCS)* ')'
 ;
 
-ActivityFinal:
-	name='ActivityFinal'
+Statement returns Statement:
+	OperationBegin | OperationEnd | CallBegin | CallEnd | EventBegin | EventEnd | ExecutionBegin | ExecutionEnd2
 ;
 
-InitalNode:
-	name='ActivityStart'
+OperationBegin returns OperationBegin:
+	'OperationBegin' name=SimpleNameCS '(' participant=[Participant] operation=[Operation] ')'
+;
+OperationEnd returns OperationEnd:
+	'OperationEnd' name=SimpleNameCS '(' participant=[Participant] operation=[Operation] ')'
 ;
 
-ForkNode:
-	'ForkNode' '->' '(' startlinks+=[JoinExp]+ ')'
+CallBegin returns CallBegin:
+	'CallBegin' name=SimpleNameCS '(' participant=[Participant] call=[Call] ')'
 ;
 
-JoinNode:
-	'(' endlinks+=[JoinExp]+ ')' '->' 'JoinNode' 
+CallEnd returns CallEnd:
+	'CallEnd' name=SimpleNameCS '(' participant=[Participant] call=[Call] ')'
 ;
 
-ComplexOpeartion:
-	LoopExp | SwitchExp // | ConcurrentExp
+EventBegin returns EventBegin:
+	'EventBegin' name=SimpleNameCS '(' participant=[Participant] event=[Event] ')'
 ;
+
+EventEnd returns EventEnd:
+	'EventEnd' name=SimpleNameCS '(' participant=[Participant] event=[Event] ')'
+;
+
+ExecutionBegin returns ExecutionBegin:
+	'ExecutionBegin' name=SimpleNameCS '(' participant=[Participant] ')'
+;
+ExecutionEnd2 returns ExecutionEnd2:
+	'ExecutionEnd' name=SimpleNameCS '(' participant=[Participant] ')'
+;
+
+
+/* ---------------- Workflow ------------------- */
+//Workflow returns Workflow:
+//	'Workflow' name=SimpleNameCS '{'
+//	
+//		'[' participants+=[Participant]* ']'
+//		
+//		partitions+=Partition*
+//		
+//	'}'
+//;
+
+//Partition:
+//	name=[Participant] '{'
+//		exps+=WorkflowExp*
+//	'}'
+//;
+//
+//WorkflowExp:
+//	SimpleOperation | ComplexOpeartion | InitalNode | ActivityFinal | ForkNode | JoinNode | PartitionAction
+//;
+//
+//PartitionAction:
+//	'->' patition=[Participant] ':' action=[JoinExp]
+//;
+//
+//JoinExp returns JoinExp:
+//	Operation | SwitchExp | LoopExp
+//;
+//
+//ActivityFinal:
+//	name='ActivityFinal'
+//;
+//
+//InitalNode:
+//	name='ActivityStart'
+//;
+//
+//ForkNode:
+//	'ForkNode' '->' '(' startlinks+=[JoinExp]+ ')'
+//;
+//
+//JoinNode:
+//	'(' endlinks+=[JoinExp]+ ')' '->' 'JoinNode' 
+//;
+//
+//ComplexOpeartion:
+//	LoopExp | SwitchExp // | ConcurrentExp
+//;
 
 //ConcurrentExp:
 //	ConcurrentStartRelationExp | ConcurrentEndRelationExp
@@ -259,9 +362,9 @@ ComplexOpeartion:
 //	'(' startlinks+=[Operation] (',' startlinks+=[Operation])* ')' '->' joinnode=[JoinNode] 
 //;
 
-SimpleOperation:
-	ref=[Operation]
-;
+//SimpleOperation:
+//	ref=[Operation]
+//;
 
 
 //LoopExp:
@@ -270,11 +373,11 @@ SimpleOperation:
 //	'}'
 //;
 
-LoopExp:
-	'Loop' '->' name=SimpleNameCS '{'
-		exps += WorkflowExp*
-	'}'
-;
+//LoopExp:
+//	'Loop' '->' name=SimpleNameCS '{'
+//		exps += WorkflowExp*
+//	'}'
+//;
 //SwitchExp:
 //	
 //	'Switch' '->' caseVarible=SimpleNameCS '{'
@@ -283,29 +386,28 @@ LoopExp:
 //	'}'
 //;
 
-SwitchExp:
-	
-	'Switch' '->' name=SimpleNameCS '{'
-		cases += SwitchCase*
-		default = SwitchDefault?
-	'}'
-;
-
-
-
-SwitchCase:
-	'case:' caseValue=SimpleNameCS '->' op=SimpleOperation
-;
-
-SwitchDefault:
-	'default:' op=SimpleOperation
-;
+//SwitchExp:
+//	
+//	'Switch' '->' name=SimpleNameCS '{'
+//		cases += SwitchCase*
+//		default = SwitchDefault?
+//	'}'
+//;
+//
+//
+//
+//SwitchCase:
+//	'case:' caseValue=SimpleNameCS '->' op=SimpleOperation
+//;
+//
+//SwitchDefault:
+//	'default:' op=SimpleOperation
+//;
 
 
 Operation :
 	name=OperationName '(' parameter+=Parameter? (',' parameter+=Parameter)* ')' (':' returnType=TypeCS)?
 ;
-
 
 OperationName:
 	SimpleNameCS
@@ -331,12 +433,21 @@ Entity returns Entity:
 	
 		attributes+=Attribute*
 		
+		'[Location]' entityLocation=EntityLocation
+		
 		('[Refer]' reference+=Reference*)?
 		
 		('[INV]' invariance+=Invariance*)?
 		
 	'}'
 ;
+
+EntityLocation:
+name=('Edge'
+	| 'Cloud'
+	| 'Cache')
+;
+
 
 Attribute returns Attribute:
 	name=SimpleNameCS ':' type=TypeCS (ismultiple?='*')?

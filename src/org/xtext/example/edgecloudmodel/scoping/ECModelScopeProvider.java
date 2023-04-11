@@ -3,16 +3,17 @@
  */
 package org.xtext.example.edgecloudmodel.scoping;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
-import org.xtext.example.edgecloudmodel.eCModel.ECModelPackage;
-import org.xtext.example.edgecloudmodel.eCModel.Operand;
-import org.xtext.example.edgecloudmodel.eCModel.OperandEnd;
+import org.xtext.example.edgecloudmodel.eCModel.*;
 
 
 /**
@@ -33,6 +34,42 @@ public class ECModelScopeProvider extends AbstractECModelScopeProvider {
 	        EObject rootElement = EcoreUtil2.getRootContainer(context);
 	        List<Operand> candidates = EcoreUtil2.getAllContentsOfType(rootElement, Operand.class);
 	        // Create IEObjectDescriptions and puts them into an IScope instance
+	        return Scopes.scopeFor(candidates);
+	    } 
+    	else if ((context instanceof OperationBegin || context instanceof OperationEnd) 
+    			&& reference != ECModelPackage.Literals.STATEMENT__PARTICIPANT) {
+	        
+    		EObject rootElement = EcoreUtil2.getRootContainer(context);
+	        
+	        Collaboration collaboration = EcoreUtil2.getAllContentsOfType(rootElement, Collaboration.class)
+	        		.stream().filter(c -> c.getWorkflow().getStatements().contains(context)).findAny().get();
+	        var candidates = Stream.concat(
+	        		collaboration.getCloudService().getOperation().stream(), 
+	        		collaboration.getEdgeService().getOperation().stream()).collect(Collectors.toList());
+	        return Scopes.scopeFor(candidates);
+	    }
+    	else if ((context instanceof EventBegin || context instanceof EventEnd) 
+    			&& reference != ECModelPackage.Literals.STATEMENT__PARTICIPANT) {
+	        
+    		EObject rootElement = EcoreUtil2.getRootContainer(context);
+	        
+	        Collaboration collaboration = EcoreUtil2.getAllContentsOfType(rootElement, Collaboration.class)
+	        		.stream().filter(c -> c.getWorkflow().getStatements().contains(context)).findAny().get();
+	        var candidates = Stream.concat(
+	        		collaboration.getCloudService().getEvent().stream(), 
+	        		collaboration.getEdgeService().getEvent().stream()).collect(Collectors.toList());
+	        return Scopes.scopeFor(candidates);
+	    }
+    	else if ((context instanceof CallBegin || context instanceof CallEnd) 
+    			&& reference != ECModelPackage.Literals.STATEMENT__PARTICIPANT) {
+	        
+    		EObject rootElement = EcoreUtil2.getRootContainer(context);
+	        
+	        Collaboration collaboration = EcoreUtil2.getAllContentsOfType(rootElement, Collaboration.class)
+	        		.stream().filter(c -> c.getWorkflow().getStatements().contains(context)).findAny().get();
+	        var candidates = Stream.concat(
+	        		collaboration.getCloudService().getCall().stream(), 
+	        		collaboration.getEdgeService().getCall().stream()).collect(Collectors.toList());
 	        return Scopes.scopeFor(candidates);
 	    }
 	    return super.getScope(context, reference);

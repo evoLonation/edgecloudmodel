@@ -93,6 +93,8 @@
         eType="#//Interaction" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="service" upperBound="-1"
         eType="#//Service" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collaboration" upperBound="-1"
+        eType="#//Collaboration" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" upperBound="-1"
         eType="#//Contract" containment="true"/>
   </eClassifiers>
@@ -115,76 +117,100 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//Participant">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="#//ServiceLocation"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="operation" upperBound="-1"
         eType="#//Operation" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="temp_property" upperBound="-1"
         eType="#//Attribute" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="workflow" unique="false"
-        upperBound="-1" eType="#//Workflow"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="invariance" upperBound="-1"
-        eType="#//Invariance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="event" upperBound="-1"
+        eType="#//Event" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="call" upperBound="-1" eType="#//Call"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceLocation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Participant" eSuperTypes="#//MultiEnd">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Collaboration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workflow" eType="#//Workflow"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edgeService" eType="#//Service"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cloudService" eType="#//Service"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="participants" upperBound="-1"
+        eType="#//CParticipant" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
+        eType="#//CMessage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executions" upperBound="-1"
+        eType="#//CExecution" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ends" upperBound="-1" eType="#//CEnd"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Workflow">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="participants" unique="false"
         upperBound="-1" eType="#//Participant"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="partitions" upperBound="-1"
-        eType="#//Partition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Partition">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//Participant"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="exps" upperBound="-1" eType="#//WorkflowExp"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WorkflowExp"/>
-  <eClassifiers xsi:type="ecore:EClass" name="PartitionAction" eSuperTypes="#//WorkflowExp">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="patition" eType="#//Participant"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="action" eType="#//JoinExp"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="JoinExp"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ActivityFinal" eSuperTypes="#//WorkflowExp">
+  <eClassifiers xsi:type="ecore:EClass" name="CEnd">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="InitalNode" eSuperTypes="#//WorkflowExp">
+  <eClassifiers xsi:type="ecore:EClass" name="CMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sender" eType="#//CEnd"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//CEnd"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CExecution" eSuperTypes="#//CMultiEnd">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sender" eType="#//CEnd"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//CEnd"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CParticipant" eSuperTypes="#//CMultiEnd"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CMultiEnd">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ForkNode" eSuperTypes="#//WorkflowExp">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="startlinks" unique="false"
-        upperBound="-1" eType="#//JoinExp"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="JoinNode" eSuperTypes="#//WorkflowExp">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="endlinks" unique="false"
-        upperBound="-1" eType="#//JoinExp"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ComplexOpeartion" eSuperTypes="#//WorkflowExp"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleOperation" eSuperTypes="#//WorkflowExp">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ref" eType="#//Operation"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LoopExp" eSuperTypes="#//JoinExp #//ComplexOpeartion">
+  <eClassifiers xsi:type="ecore:EClass" name="Event">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="exps" upperBound="-1" eType="#//WorkflowExp"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SwitchExp" eSuperTypes="#//JoinExp #//ComplexOpeartion">
+  <eClassifiers xsi:type="ecore:EClass" name="Call">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cases" upperBound="-1"
-        eType="#//SwitchCase" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="#//SwitchDefault"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="origin" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="target" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SwitchCase">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="op" eType="#//SimpleOperation"
-        containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="participant" eType="#//Participant"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SwitchDefault">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="op" eType="#//SimpleOperation"
-        containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OperationBegin" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//Operation"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//JoinExp">
+  <eClassifiers xsi:type="ecore:EClass" name="OperationEnd" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//Operation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallBegin" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="call" eType="#//Call"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallEnd" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="call" eType="#//Call"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventBegin" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="event" eType="#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventEnd" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="event" eType="#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExecutionBegin" eSuperTypes="#//Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExecutionEnd2" eSuperTypes="#//Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
         eType="#//Parameter" containment="true"/>
@@ -203,10 +229,15 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityLocation" eType="#//EntityLocation"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="reference" upperBound="-1"
         eType="#//Reference" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="invariance" upperBound="-1"
         eType="#//Invariance" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityLocation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
