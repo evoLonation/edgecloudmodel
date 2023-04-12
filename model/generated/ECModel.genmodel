@@ -121,6 +121,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/lifelines"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/executions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/messages"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/fragments"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/ends"/>
     </genClasses>
     <genClasses ecoreClass="ECModel.ecore#//Workflow">
@@ -133,6 +134,7 @@
     </genClasses>
     <genClasses ecoreClass="ECModel.ecore#//CMessage">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//CMessage/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//CMessage/operation"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CMessage/sender"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CMessage/receiver"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CMessage/sourcePoint"/>
@@ -141,6 +143,20 @@
     <genClasses ecoreClass="ECModel.ecore#//CExecution">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CExecution/start"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CExecution/finish"/>
+    </genClasses>
+    <genClasses ecoreClass="ECModel.ecore#//CFragment">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//CFragment/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//CFragment/operator"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CFragment/coveredLifelines"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CFragment/start"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CFragment/finish"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//CFragment/operands"/>
+    </genClasses>
+    <genClasses ecoreClass="ECModel.ecore#//COperand">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//COperand/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//COperand/condition"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//COperand/start"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//COperand/finish"/>
     </genClasses>
     <genClasses ecoreClass="ECModel.ecore#//CLifeline"/>
     <genClasses ecoreClass="ECModel.ecore#//CPoint">

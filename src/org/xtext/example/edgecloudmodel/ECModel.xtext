@@ -222,6 +222,8 @@ Collaboration returns Collaboration:
 		lifelines+=CLifeline*
 		executions+=CExecution*
 		messages+=CMessage*
+		fragments+=CFragment*
+		operands+=COperand*
 		ends+=CEnd*)?
 		
 	'}'
@@ -235,24 +237,43 @@ Workflow returns Workflow:
 ;
 
 CEnd:
-	'CEnd::' name=SimpleNameCS 
+	'End::' name=SimpleNameCS 
 ;
 CMessage:
-	'CMessage::' name=SimpleNameCS '('
+	'Message::' name=SimpleNameCS '('
+	operation=SimpleNameCS
 	sender=[CEnd]
 	receiver=[CEnd]
 	sourcePoint=[CPoint]
 	targetPoint=[CPoint]
-')'
+	')'
 ;
 CExecution:
-	'CExecution::' name=SimpleNameCS '('
+	'Execution::' name=SimpleNameCS '('
 	start=[CEnd]
 	finish=[CEnd]
-')'
+	')'
 ;
+
+CFragment :
+	'Fragment::' name=SimpleNameCS '->' operator=SimpleNameCS '{'
+		'[Lifelines:' coveredLifelines+=[CLifeline]* ']'
+		start=[CEnd]
+		finish=[CEnd]
+		operands+=[COperand]*
+	'}'
+;
+COperand:
+	'Operand::' name=SimpleNameCS '('
+	condition=SimpleNameCS
+	start=[CEnd]
+	finish=[CEnd]
+	')'
+;
+
+
 CLifeline:
-	'CLifeline::' name=SimpleNameCS
+	'Lifeline::' name=SimpleNameCS
 ;
 
 CPoint:

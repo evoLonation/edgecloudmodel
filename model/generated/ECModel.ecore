@@ -148,6 +148,8 @@
         eType="#//CExecution" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
         eType="#//CMessage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fragments" upperBound="-1"
+        eType="#//CFragment" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ends" upperBound="-1" eType="#//CEnd"
         containment="true"/>
   </eClassifiers>
@@ -163,12 +165,29 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CMessage">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sender" eType="#//CEnd"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//CEnd"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sourcePoint" eType="#//CPoint"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetPoint" eType="#//CPoint"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CExecution" eSuperTypes="#//CPoint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//CEnd"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finish" eType="#//CEnd"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CFragment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coveredLifelines" unique="false"
+        upperBound="-1" eType="#//CLifeline"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//CEnd"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finish" eType="#//CEnd"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
+        eType="#//COperand" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="COperand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//CEnd"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="finish" eType="#//CEnd"/>
   </eClassifiers>
