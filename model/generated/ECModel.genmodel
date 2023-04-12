@@ -105,7 +105,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Service/operation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Service/temp_property"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Service/event"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Service/call"/>
     </genClasses>
     <genClasses ecoreClass="ECModel.ecore#//ServiceLocation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//ServiceLocation/name"/>
@@ -115,19 +114,17 @@
     </genClasses>
     <genClasses ecoreClass="ECModel.ecore#//Collaboration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//Collaboration/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/workflow"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/edgeService"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/cloudService"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/participant"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/callBlock"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/collaborateBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/lifelines"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/executions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/messages"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/fragments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/operands"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Collaboration/ends"/>
-    </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//Workflow">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//Workflow/name"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//Workflow/participants"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Workflow/statements"/>
     </genClasses>
     <genClasses ecoreClass="ECModel.ecore#//CEnd">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//CEnd/name"/>
@@ -158,10 +155,40 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//COperand/start"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//COperand/finish"/>
     </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//CLifeline"/>
+    <genClasses ecoreClass="ECModel.ecore#//CLifeline">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//CLifeline/isActor"/>
+    </genClasses>
     <genClasses ecoreClass="ECModel.ecore#//CPoint">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//CPoint/name"/>
     </genClasses>
+    <genClasses ecoreClass="ECModel.ecore#//Block">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//Block/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//Block/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Block/parameter"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Block/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="ECModel.ecore#//OperationStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//OperationStatement/operation"/>
+    </genClasses>
+    <genClasses ecoreClass="ECModel.ecore#//CallStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CallStatement/service"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//CallStatement/parameter"/>
+    </genClasses>
+    <genClasses ecoreClass="ECModel.ecore#//NoticeStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//NoticeStatement/event"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//NoticeStatement/parameter"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//NoticeStatement/actor"/>
+    </genClasses>
+    <genClasses ecoreClass="ECModel.ecore#//IfStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//IfStatement/condition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//IfStatement/ifStatements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//IfStatement/elseStatements"/>
+    </genClasses>
+    <genClasses ecoreClass="ECModel.ecore#//WhileStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//WhileStatement/condition"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//WhileStatement/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="ECModel.ecore#//Statement"/>
     <genClasses ecoreClass="ECModel.ecore#//Event">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//Event/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Event/parameter"/>
@@ -171,30 +198,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//Call/origin"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//Call/target"/>
     </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//Statement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//Statement/name"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//Statement/participant"/>
-    </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//OperationBegin">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//OperationBegin/operation"/>
-    </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//OperationEnd">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//OperationEnd/operation"/>
-    </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//CallBegin">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CallBegin/call"/>
-    </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//CallEnd">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//CallEnd/call"/>
-    </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//EventBegin">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//EventBegin/event"/>
-    </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//EventEnd">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ECModel.ecore#//EventEnd/event"/>
-    </genClasses>
-    <genClasses ecoreClass="ECModel.ecore#//ExecutionBegin"/>
-    <genClasses ecoreClass="ECModel.ecore#//ExecutionEnd2"/>
     <genClasses ecoreClass="ECModel.ecore#//Operation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ECModel.ecore#//Operation/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ECModel.ecore#//Operation/parameter"/>

@@ -189,8 +189,6 @@ Service returns Service:
 	
 	('[Event]' event += Event*)? 
 	
-	('[Call]' call += Call*)? 
-	
 //	('[WorkFlow]' workflow += [Workflow]*)? 
 	
 //	('[INV]' invariance+=Invariance*)?
@@ -211,12 +209,16 @@ Participant:
 
 Collaboration returns Collaboration:
 	'Collaboration' name=SimpleNameCS '{'
-		'[Workflow]' 
-		workflow=Workflow
+		
 		'[EdgeService]'
 		edgeService=Service
 		'[CloudService]'
 		cloudService=Service
+		'[Participant]'
+		participant+=[Actor]*
+		'[Workflow]' 
+		callBlock=Block
+		collaborateBlock=Block
 		
 		('[Other]'
 		lifelines+=CLifeline*
@@ -229,12 +231,6 @@ Collaboration returns Collaboration:
 	'}'
 ;
 /* ---------------- Workflow ------------------------- */
-Workflow returns Workflow:
-	'Workflow' name=SimpleNameCS '{'
-		'[' participants+=[Participant]* ']'
-		statements+=Statement*
-	'}'
-;
 
 CEnd:
 	'End::' name=SimpleNameCS 
@@ -256,11 +252,11 @@ CExecution:
 ;
 
 CFragment :
-	'Fragment::' name=SimpleNameCS '->' operator=SimpleNameCS '{'
+	'Fragment::' name=SimpleNameCS '->' operator=Operator '{'
 		'[Lifelines:' coveredLifelines+=[CLifeline]* ']'
 		start=[CEnd]
 		finish=[CEnd]
-		operands+=[COperand]*
+		operands+=COperand*
 	'}'
 ;
 COperand:
@@ -273,13 +269,52 @@ COperand:
 
 
 CLifeline:
-	'Lifeline::' name=SimpleNameCS
+	'Lifeline::' name=SimpleNameCS  (isActor?='[Actor]')?
 ;
 
 CPoint:
 	CLifeline | CExecution
 ;
 
+Block:
+	type=BlockType name=[Service] '(' parameter+=Parameter? (',' parameter+=Parameter)* ')' '{'
+		statements+=Statement*
+	'}'
+;
+
+OperationStatement:
+	'operation::' operation=[Operation] '(' ')'
+;
+CallStatement:
+	'call::' service=[Service] '(' parameter+=SimpleNameCS? (',' parameter+=SimpleNameCS)* ')'
+;
+NoticeStatement:
+	'notice::' event=[Event] '(' parameter+=SimpleNameCS? (',' parameter+=SimpleNameCS)* ')' ':' actor=[Actor]
+;
+IfStatement:
+	'if' '(' condition=AtomicExpression ')' '{'
+		ifStatements+=Statement*
+	'}' ('else' '{'
+		elseStatements+=Statement*
+	'}')?
+;
+WhileStatement:
+	'while' '(' condition=AtomicExpression ')' '{'
+		statements+=Statement*
+	'}'
+;
+
+Statement:
+	OperationStatement |
+	CallStatement |
+	NoticeStatement |
+	IfStatement |
+	WhileStatement
+;
+
+BlockType:
+	'Call' | 'Collaborate'
+;
 
 Event :
 	name=SimpleNameCS '(' parameter+=Parameter? (',' parameter+=Parameter)* ')'
@@ -287,40 +322,6 @@ Event :
 
 Call:
 	name=SimpleNameCS '(' (origin+=SimpleNameCS ':' target+=SimpleNameCS)? (',' origin+=SimpleNameCS ':' target+=SimpleNameCS)* ')'
-;
-
-Statement returns Statement:
-	OperationBegin | OperationEnd | CallBegin | CallEnd | EventBegin | EventEnd | ExecutionBegin | ExecutionEnd2
-;
-
-OperationBegin returns OperationBegin:
-	'OperationBegin' name=SimpleNameCS '(' participant=[Participant] operation=[Operation] ')'
-;
-OperationEnd returns OperationEnd:
-	'OperationEnd' name=SimpleNameCS '(' participant=[Participant] operation=[Operation] ')'
-;
-
-CallBegin returns CallBegin:
-	'CallBegin' name=SimpleNameCS '(' participant=[Participant] call=[Call] ')'
-;
-
-CallEnd returns CallEnd:
-	'CallEnd' name=SimpleNameCS '(' participant=[Participant] call=[Call] ')'
-;
-
-EventBegin returns EventBegin:
-	'EventBegin' name=SimpleNameCS '(' participant=[Participant] event=[Event] ')'
-;
-
-EventEnd returns EventEnd:
-	'EventEnd' name=SimpleNameCS '(' participant=[Participant] event=[Event] ')'
-;
-
-ExecutionBegin returns ExecutionBegin:
-	'ExecutionBegin' name=SimpleNameCS '(' participant=[Participant] ')'
-;
-ExecutionEnd2 returns ExecutionEnd2:
-	'ExecutionEnd' name=SimpleNameCS '(' participant=[Participant] ')'
 ;
 
 
