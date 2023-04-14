@@ -185,9 +185,10 @@ Service returns Service:
 	
 	('[Operation]' operation += Operation*)? 
 	
+	('[Event]' event += Event*)? 
+	
 	('[TempProperty]' temp_property += Attribute*)? 
 	
-	('[Event]' event += Event*)? 
 	
 //	('[WorkFlow]' workflow += [Workflow]*)? 
 	
@@ -210,12 +211,14 @@ Participant:
 Collaboration returns Collaboration:
 	'Collaboration' name=SimpleNameCS '{'
 		
-		'[EdgeService]'
-		edgeService=Service
-		'[CloudService]'
-		cloudService=Service
-		'[Participant]'
-		participant+=[Actor]*
+		'[Callee]'
+		callee=Service
+		'[Collaborator]'
+		collaborator=Service
+		'[Caller]'
+		caller=[Actor]
+		'[Notify]'
+		notifies+=[Actor]*
 		'[Workflow]' 
 		callBlock=Block
 		collaborateBlock=Block
@@ -261,7 +264,7 @@ CFragment :
 ;
 COperand:
 	'Operand::' name=SimpleNameCS '('
-	condition=SimpleNameCS
+	condition=AtomicExpression
 	start=[CEnd]
 	finish=[CEnd]
 	')'
@@ -269,7 +272,7 @@ COperand:
 
 
 CLifeline:
-	'Lifeline::' name=SimpleNameCS  (isActor?='[Actor]')?
+	'Lifeline::'  (isActor?='Actor::')? name=SimpleNameCS 
 ;
 
 CPoint:
@@ -277,13 +280,13 @@ CPoint:
 ;
 
 Block:
-	type=BlockType name=[Service] '(' parameter+=Parameter? (',' parameter+=Parameter)* ')' '{'
+	type=BlockType name=[Service] '(' parameter+=Parameter? (',' parameter+=Parameter)* ')' (':' returnParam=Parameter)? '{'
 		statements+=Statement*
 	'}'
 ;
 
 OperationStatement:
-	'operation::' operation=[Operation] '(' ')'
+	'operation::' operation=[Operation] '(' parameter+=SimpleNameCS? (',' parameter+=SimpleNameCS)* ')'
 ;
 CallStatement:
 	'call::' service=[Service] '(' parameter+=SimpleNameCS? (',' parameter+=SimpleNameCS)* ')'
@@ -499,7 +502,7 @@ EntityType:
 ;
 
 EnumEntity:
-	name=SimpleNameCS '[' element+=EnumItem ('|' element+=EnumItem)* ']'
+	name=SimpleNameCS '[[' element+=EnumItem ('|' element+=EnumItem)* ']]'
 ;
 
 EnumItem:

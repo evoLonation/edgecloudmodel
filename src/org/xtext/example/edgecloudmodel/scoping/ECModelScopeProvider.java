@@ -65,28 +65,40 @@ public class ECModelScopeProvider extends AbstractECModelScopeProvider {
 	    	List<EObject> candidates;
 	    	if(context instanceof OperationStatement) {
 	    		candidates = Stream.concat(
-		        		collaboration.getCloudService().getOperation().stream(), 
-		        		collaboration.getEdgeService().getOperation().stream()
+		        		collaboration.getCallee().getOperation().stream(), 
+		        		collaboration.getCollaborator().getOperation().stream()
 		        		).collect(Collectors.toList());
-		        
+		       
     	 	}else if(context instanceof NoticeStatement) {
     	 		if(reference == ECModelPackage.Literals.NOTICE_STATEMENT__EVENT) {
     	 			candidates = Stream.concat(
-    		        		collaboration.getCloudService().getEvent().stream(), 
-    		        		collaboration.getEdgeService().getEvent().stream()
+    		        		collaboration.getCallee().getEvent().stream(), 
+    		        		collaboration.getCollaborator().getEvent().stream()
     		        		).collect(Collectors.toList());
     	 		}else {
-		        	candidates = collaboration.getParticipant().stream().collect(Collectors.toList());
+		        	candidates = collaboration.getNotifies().stream().collect(Collectors.toList());
     	 		}
     	 	}else if(context instanceof CallStatement){
     	 		candidates = Stream.of(
-		        		collaboration.getCloudService(), 
-		        		collaboration.getEdgeService()
+		        		collaboration.getCallee(), 
+		        		collaboration.getCollaborator()
 		        		).collect(Collectors.toList());
     	 	}else{
     	 		candidates = Collections.emptyList();
     	 	}
 	    	return Scopes.scopeFor(candidates);
+	    }else if(context instanceof Contract) {
+	    	return Scopes.scopeFor(
+	    			Stream.concat(
+	    					EcoreUtil2.getAllContentsOfType(
+	    	    					EcoreUtil2.getRootContainer(context),
+	    	    					Collaboration.class)
+	    					.stream().flatMap(c -> Stream.of(c.getCallee(), c.getCollaborator())),
+	    	    			EcoreUtil2.getAllContentsOfType(
+	    	    					EcoreUtil2.getRootContainer(context),
+	    	    					UseCaseModel.class)
+	    	    			.get(0).getService().stream())
+	    			.collect(Collectors.toList()));
 	    }
 //    	else if ((context instanceof OperationBegin || context instanceof OperationEnd) 
 //    			&& reference != ECModelPackage.Literals.STATEMENT__PARTICIPANT) {

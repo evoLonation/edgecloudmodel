@@ -121,10 +121,10 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="operation" upperBound="-1"
         eType="#//Operation" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="temp_property" upperBound="-1"
-        eType="#//Attribute" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="event" upperBound="-1"
         eType="#//Event" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="temp_property" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceLocation">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -134,11 +134,12 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Collaboration">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="edgeService" eType="#//Service"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="callee" eType="#//Service"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cloudService" eType="#//Service"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collaborator" eType="#//Service"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="participant" unique="false"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="caller" eType="#//Actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notifies" unique="false"
         upperBound="-1" eType="#//Actor"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="callBlock" eType="#//Block"
         containment="true"/>
@@ -184,7 +185,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="COperand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//AtomicExpression"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//CEnd"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="finish" eType="#//CEnd"/>
   </eClassifiers>
@@ -199,11 +201,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//Service"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
         eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnParam" eType="#//Parameter"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//Statement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OperationStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//Operation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameter" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CallStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="service" eType="#//Service"/>
